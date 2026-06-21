@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
-html {
-  background-color: rgb(10, 10, 10);
+@utility bg-background-gradient {
+  background: #00002e;
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 46, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
 }
