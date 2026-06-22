@@ -4,9 +4,9 @@ const Login = () => {
     const formData = new FormData(event.currentTarget);
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
-    for (const [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(key, value);
+    // }
 
     const response = await fetch("http://localhost:5164/auth/login", {
       method: "POST",
@@ -19,7 +19,7 @@ const Login = () => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      // window.location.href = "/dashboard";
+      window.location.href = "/home";
     }
     if (!response.ok) {
       const errorData = await response.json();
