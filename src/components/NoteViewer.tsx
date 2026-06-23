@@ -1,15 +1,32 @@
-import { History } from "lucide-react";
+import { formatDistance } from "date-fns";
 
-const Note = () => {
+const Note = ({ note }: { note: any }) => {
   return (
     <div className="bg-neutral-900 w-full h-full">
-      <div className="border-b border-zinc-700 w-full p-6 text-zinc-400 flex min-h-20 gap-2 items-center">
-        <div className="flex items-center gap-5 relative">
-          <History />
-          <div className="border-r border border-zinc-700 self-stretch" />
-          <p className="text-sm font-medium">Last Edited</p>
-        </div>
-      </div>
+      {note ? (
+        <>
+          <div className="border-b border-zinc-700 w-full p-6 text-zinc-400 flex min-h-20 gap-2 items-center">
+            <div className="flex items-center gap-5 relative">
+              {/* <div className="border-r border border-zinc-700 self-stretch" /> */}
+              <p className="text-sm font-medium">
+                Last edited{" "}
+                {formatDistance(new Date(note.updatedAt), new Date()) + " ago"}
+              </p>
+            </div>
+          </div>
+          <div className="px-10">
+            <article className="px-4 pt-10 pb-20 flex flex-col gap-7">
+              <div className="flex flex-col gap-5">
+                <h1 className="text-zinc-300">
+                  {note.title}
+                </h1>
+                <hr className="border-zinc-600" />
+              </div>
+              <p className="text-zinc-300">{note.content}</p>
+            </article>
+          </div>
+        </>
+      ) : null}
     </div>
   );
 };
