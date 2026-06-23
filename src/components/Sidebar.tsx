@@ -11,7 +11,7 @@ const Sidebar = () => {
       </div>
       <ul className="mt-8 flex flex-col text-md font-medium">
         <a
-          href="/"
+          href="/home"
           className="hover:bg-neutral-600 transition-colors px-7 py-2 h-12 flex items-center gap-3"
         >
           <FileText className="size-5" />
