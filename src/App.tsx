@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AuthLayout from "./layouts/AuthLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreateNote from "./pages/CreateNote";
 
 const App = () => {
   return (
@@ -18,7 +19,8 @@ const App = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/home" element={<Home />} />
-          <Route path="search" element={<Search />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/create-note" element={<CreateNote />} />
         </Route>
       </Route>
     </Routes>

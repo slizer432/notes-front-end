@@ -1,4 +1,5 @@
 import { formatDistance } from "date-fns";
+import { CirclePlus } from "lucide-react";
 
 const Note = ({ note }: { note: any }) => {
   return (
@@ -17,7 +18,7 @@ const Note = ({ note }: { note: any }) => {
           <div className="px-10">
             <article className="px-4 pt-10 pb-20 flex flex-col gap-7">
               <div className="flex flex-col gap-5">
-                <h1 className="text-zinc-300">
+                <h1 className="text-zinc-300 text-3xl font-bold">
                   {note.title}
                 </h1>
                 <hr className="border-zinc-600" />
@@ -26,7 +27,29 @@ const Note = ({ note }: { note: any }) => {
             </article>
           </div>
         </>
-      ) : null}
+      ) : (
+        <>
+          <div className="flex flex-col justify-center items-center h-full gap-5">
+            <img
+              src="public/no-note.png"
+              alt=""
+              className="rounded-2xl border-zinc-700 border"
+            />
+            <p className="text-stone-200 text-2xl font-medium">
+              No note selected
+            </p>
+            <p className="text-stone-400 text-sm font-normal">
+              Select a note from the list or create a new one to get started.
+            </p>
+            <button
+              className="bg-violet-300 text-violet-900 font-bold py-4 px-6 rounded flex items-center gap-2 cursor-pointer hover:bg-violet-400 transition-colors"
+              onClick={() => (window.location.href = "/create-note")}
+            >
+              <CirclePlus /> Create New Note
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
