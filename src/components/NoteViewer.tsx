@@ -1,18 +1,31 @@
 import { formatDistance } from "date-fns";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, SquarePen } from "lucide-react";
 
-const Note = ({ note }: { note: any }) => {
+const NoteViewer = ({
+  note,
+  setIsEdit,
+}: {
+  note: any;
+  setIsEdit: (isEdit: boolean) => void;
+}) => {
   return (
     <div className="bg-neutral-900 w-full h-full">
       {note ? (
         <>
           <div className="border-b border-zinc-700 w-full p-6 text-zinc-400 flex min-h-20 gap-2 items-center">
-            <div className="flex items-center gap-5 relative">
+            <div className="flex items-center justify-between w-full relative">
               {/* <div className="border-r border border-zinc-700 self-stretch" /> */}
               <p className="text-sm font-medium">
                 Last edited{" "}
                 {formatDistance(new Date(note.updatedAt), new Date()) + " ago"}
               </p>
+              <button
+                className="bg-violet-300 text-violet-900 font-bold py-2 px-4 rounded flex items-center gap-2 cursor-pointer hover:bg-violet-400 transition-colors absolute right-0"
+                onClick={() => setIsEdit(true)}
+              >
+                <SquarePen className="size-5" />
+                Edit
+              </button>
             </div>
           </div>
           <div className="px-10">
@@ -54,4 +67,4 @@ const Note = ({ note }: { note: any }) => {
   );
 };
 
-export default Note;
+export default NoteViewer;

@@ -2,8 +2,7 @@ import { useState } from "react";
 import NoteEditor from "../components/NoteEditor";
 
 const CreateNote = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [note, setNote] = useState();
 
   const handleCreateNote = async () => {
     const response = await fetch("http://localhost:5164/notes", {
@@ -12,7 +11,7 @@ const CreateNote = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify(note),
     });
 
     if (response.ok) {
@@ -24,13 +23,7 @@ const CreateNote = () => {
 
   return (
     <div className="w-full h-full">
-      <NoteEditor
-        action={handleCreateNote}
-        title={title}
-        setTitle={setTitle}
-        content={content}
-        setContent={setContent}
-      />
+      <NoteEditor action={handleCreateNote} note={note} setNote={setNote} />
     </div>
   );
 };
