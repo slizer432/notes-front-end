@@ -44,6 +44,8 @@ const Login = () => {
               Username
             </label>
             <input
+              required
+              minLength={5}
               type="text"
               id="username"
               name="username"
@@ -58,6 +60,8 @@ const Login = () => {
               Password
             </label>
             <input
+              required
+              minLength={5}
               type="password"
               id="password"
               name="password"
