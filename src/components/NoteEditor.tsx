@@ -44,6 +44,7 @@ const NoteEditor = ({
             <input
               className="text-zinc-300 outline-none text-3xl font-bold"
               placeholder="Note Title"
+              minLength={3}
               value={note ? note.title : ""}
               onChange={(e) => setNote({ ...note, title: e.target.value })}
             ></input>
@@ -52,6 +53,7 @@ const NoteEditor = ({
           <input
             className="text-zinc-300 outline-none"
             placeholder="Note content"
+            minLength={5}
             value={note ? note.content : ""}
             onChange={(e) => setNote({ ...note, content: e.target.value })}
           ></input>

@@ -1,4 +1,9 @@
+import { Loader } from "lucide-react";
+import { useState } from "react";
+
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -7,6 +12,7 @@ const Login = () => {
     // for (const [key, value] of formData.entries()) {
     //   console.log(key, value);
     // }
+    setIsLoading(true);
 
     const response = await fetch("http://localhost:5164/auth/login", {
       method: "POST",
@@ -19,10 +25,12 @@ const Login = () => {
     if (response.ok) {
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      setIsLoading(false);
       window.location.href = "/home";
     }
     if (!response.ok) {
       const errorData = await response.json();
+      setIsLoading(false);
       console.error("Login failed:", errorData.message);
     }
   }
@@ -76,9 +84,9 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="mt-4 cursor-pointer  rounded-md bg-indigo-600 py-6 px-4 text-xl font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+            className="mt-4 cursor-pointer  rounded-md bg-indigo-600 py-6 px-4 text-xl font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors flex items-center justify-center"
           >
-            Log In
+            {isLoading ? <Loader/> : "Log In"}
           </button>
           <p className="mt-4 text-center text-sm text-zinc-300">
             New Here?{" "}
