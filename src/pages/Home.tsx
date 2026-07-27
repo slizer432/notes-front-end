@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import NoteEditor from "../components/NoteEditor";
 import type { Note } from "../types/Note";
 import ConfirmModal from "../components/ConfirmModal";
+import { deleteNote, getNotes, updateNote } from "../helper/noteApi";
 
 const Home = () => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -13,15 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const response = await fetch("http://localhost:5164/notes", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const data = await response.json();
-      console.log(data);
+      const data = await getNotes();
 
       setNotes(data);
     };
@@ -32,45 +25,24 @@ const Home = () => {
   const handleUpdateNote = async () => {
     if (!selectedNote) return;
 
-    const response = await fetch(
-      `http://localhost:5164/notes/${selectedNote.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(selectedNote),
-      },
-    );
-    if (response.ok) {
-      setIsEdit(false);
-      console.log("Note updated:");
-    }
+    await updateNote(selectedNote);
+    setIsEdit(false);
   };
 
   const handleDeleteNote = async () => {
     if (!selectedNote) return;
 
-    const response = await fetch(
-      `http://localhost:5164/notes/${selectedNote.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
-    );
-    if (response.ok) {
-      setNotes(notes.filter((note) => note.id !== selectedNote.id));
-      setSelectedNote(undefined);
-      setDeleteModal(false);
-    }
+    await deleteNote(selectedNote.id);
+    setNotes(notes.filter((note) => note.id !== selectedNote.id));
+    setSelectedNote(undefined);
+    setDeleteModal(false);
   };
 
   return (
     <div className="flex w-full h-full">
-      <NoteList notes={notes} onNoteSelect={setSelectedNote} />
+      <div className="w-1/3 h-full">
+        <NoteList notes={notes} onNoteSelect={setSelectedNote} />
+      </div>
       {isEdit ? (
         <NoteEditor
           note={selectedNote}

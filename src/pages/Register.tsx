@@ -1,5 +1,6 @@
-import { Loader, LoaderCircle } from "lucide-react";
+import { Loader } from "lucide-react";
 import { useState } from "react";
+import { loginUser, registerUser } from "../helper/authApi";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,31 +13,15 @@ const Register = () => {
     const password = formData.get("password") as string;
     setIsLoading(true);
 
-    const response = await fetch("http://localhost:5164/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Registration successful:", data);
+    try {
+      await registerUser({ username, email, password });
+      const data = await loginUser({ username, password });
+      localStorage.setItem("token", data.token);
+      window.location.href = "/home";
+    } catch (error) {
+      console.error("Registration failed:", error);
+    } finally {
       setIsLoading(false);
-      const login = fetch("http://localhost:5164/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      const loginResponse = await login;
-      if (loginResponse.ok) {
-        const data = await loginResponse.json();
-        localStorage.setItem("token", data.token);
-        window.location.href = "/home";
-      }
     }
   }
 

@@ -1,5 +1,6 @@
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { loginUser } from "../helper/authApi";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,24 +15,14 @@ const Login = () => {
     // }
     setIsLoading(true);
 
-    const response = await fetch("http://localhost:5164/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
+    try {
+      const data = await loginUser({ username, password });
       localStorage.setItem("token", data.token);
-      setIsLoading(false);
       window.location.href = "/home";
-    }
-    if (!response.ok) {
-      const errorData = await response.json();
+    } catch (error) {
+      console.error("Login failed:", error);
+    } finally {
       setIsLoading(false);
-      console.error("Login failed:", errorData.message);
     }
   }
   return (
@@ -86,7 +77,7 @@ const Login = () => {
             type="submit"
             className="mt-4 cursor-pointer  rounded-md bg-indigo-600 py-6 px-4 text-xl font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors flex items-center justify-center"
           >
-            {isLoading ? <Loader/> : "Log In"}
+            {isLoading ? <Loader /> : "Log In"}
           </button>
           <p className="mt-4 text-center text-sm text-zinc-300">
             New Here?{" "}
