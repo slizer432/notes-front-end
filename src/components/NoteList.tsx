@@ -1,36 +1,87 @@
-import { formatDistance } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
+import { FileText, Inbox } from "lucide-react";
+import type { Note } from "../types/Note";
+
+interface NoteListProps {
+  notes: Note[];
+  selectedNoteId?: string;
+  onNoteSelect: (note: Note) => void;
+  title?: string;
+}
 
 const NoteList = ({
   notes,
+  selectedNoteId,
   onNoteSelect,
-}: {
-  notes: any[];
-  onNoteSelect: (note: any) => void;
-}) => {
+  title = "Notes",
+}: NoteListProps) => {
+  const formatDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return "Recently";
+      return formatDistanceToNow(date, { addSuffix: true });
+    } catch {
+      return "Recently";
+    }
+  };
+
   return (
-    <div className="bg-black h-full w-[60vh] border-l border-b border-zinc-700 flex flex-col border-r">
-      <div className="p-6 border-b border-zinc-700 min-h-20">
-        <h1 className="text-lg font-bold uppercase text-zinc-400">Notes</h1>
+    <div className="bg-zinc-950 h-full w-full border-r border-zinc-800 flex flex-col overflow-hidden">
+      <div className="p-5 border-b border-zinc-800 flex items-center justify-between min-h-16">
+        <h1 className="text-sm font-bold uppercase tracking-wider text-zinc-400 flex items-center gap-2">
+          <FileText className="size-4 text-indigo-400" />
+          <span>{title}</span>
+        </h1>
+        <span className="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-md font-medium">
+          {notes.length}
+        </span>
       </div>
-      {notes.map((note: any) => (
-        <div
-          key={note.id}
-          className="p-7 border-b border-zinc-700 hover:bg-zinc-800 cursor-pointer"
-          onClick={() => onNoteSelect(note)}
-        >
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-zinc-300 truncate max-w-[25vh]">
-              {note.title}
-            </h2>
-            <p className="text-zinc-500 truncate max-w-[25vh]">
-              {formatDistance(new Date(note.updatedAt), new Date())} ago
+
+      <div className="flex-1 overflow-y-auto">
+        {notes.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center text-zinc-500">
+            <Inbox className="size-12 mb-3 stroke-[1.5] text-zinc-600" />
+            <p className="text-sm font-medium text-zinc-400 mb-1">No notes found</p>
+            <p className="text-xs text-zinc-500 max-w-[200px]">
+              Try adjusting your search query or clear your filter options.
             </p>
           </div>
-          <p className="text-zinc-500 truncate max-w-[25vh]">{note.content}</p>
-        </div>
-      ))}
+        ) : (
+          notes.map((note) => {
+            const isSelected = selectedNoteId === note.id;
+            return (
+              <div
+                key={note.id}
+                className={`p-5 border-b border-zinc-800/80 cursor-pointer transition-all ${
+                  isSelected
+                    ? "bg-zinc-900 border-l-4 border-l-indigo-500 pl-4"
+                    : "hover:bg-zinc-900/60 hover:border-l-4 hover:border-l-zinc-700 hover:pl-4"
+                }`}
+                onClick={() => onNoteSelect(note)}
+              >
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <h2
+                    className={`text-sm font-semibold truncate ${
+                      isSelected ? "text-indigo-200" : "text-zinc-200"
+                    }`}
+                  >
+                    {note.title || "Untitled Note"}
+                  </h2>
+                  <span className="text-[11px] text-zinc-500 shrink-0">
+                    {formatDate(note.updatedAt || note.createdAt)}
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed">
+                  {note.content || "(No content)"}
+                </p>
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 };
 
 export default NoteList;
+
