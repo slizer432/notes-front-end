@@ -41,7 +41,11 @@ const Home = () => {
   return (
     <div className="flex w-full h-full">
       <div className="w-1/3 h-full">
-        <NoteList notes={notes} onNoteSelect={setSelectedNote} />
+        <NoteList
+          notes={notes}
+          selectedNoteId={selectedNote?.id}
+          onNoteSelect={setSelectedNote}
+        />
       </div>
       {isEdit ? (
         <NoteEditor
